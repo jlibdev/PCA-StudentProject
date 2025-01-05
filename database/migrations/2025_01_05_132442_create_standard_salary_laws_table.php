@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ssl', function (Blueprint $table) {
-            $table->id('ssl_id');
-            $table->string('step_name', 10);
-            $table->decimal('salary', 10, 2);
-            $table->string('grade_id', 10);
-            $table->unique(['grade_id', 'step_name']);
+        Schema::create('standard_salary_laws', function (Blueprint $table) {
+            $table->id();
+            $table->integer('step');
+            $table->decimal('salary', 10,2);
+            $table->integer('grade');
+            $table->unique(['grade', 'step']);
+            $table->timestamps();
         });
     }
 
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ssl');
+        Schema::dropIfExists('standard_salary_laws');
     }
 };

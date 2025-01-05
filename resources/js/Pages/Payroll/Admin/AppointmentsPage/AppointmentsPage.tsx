@@ -93,12 +93,12 @@ const AppointmentsPage = () => {
                         </DialogMenu>
                     </div>
                 </div>
-                <DataTable
+                {/* <DataTable
                     {...{
                         table,
                         rowStyle: "odd:bg-white even:bg-transparent",
                     }}
-                />
+                /> */}
 
                 <PaginationTable table={table}></PaginationTable>
             </div>
