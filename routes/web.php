@@ -53,8 +53,8 @@ Route::domain('payroll.' . env('APP_URL'))->group(function () {
     Route::get('login', function () {
         return Inertia::render("Payroll/LoginPage");
     })->name('payroll.login');
-
-    Route::prefix('admin')->middleware(['usercheck:admin', 'auth'])->group(function () {
+    // ->middleware(['usercheck:admin', 'auth'])
+    Route::prefix('admin')->group(function () {
         Route::get('dashboard', [AdminPageController::class, 'index'])->name('admin.dashboard');
         // PAYROLL ROUTES
         Route::get('payroll', [SummaryController::class, 'Summary'])->name('admin.payrolls');
@@ -99,14 +99,14 @@ Route::domain('payroll.' . env('APP_URL'))->group(function () {
 
         //Query routes
         Route::get('/test', [PageController::class, 'testingPage']);
-        // Route::get('employee/{employee_code}', [EmployeeController::class, 'get_employee_data'])->name('admin.employee_data');
         Route::get('/employeelist', [PayrollSheetController::class, 'get_employees'])->name('admin.get_employee_data');
+        Route::get('/employee/{id}', [PayrollSheetController::class, 'get_employee'])->name('admin.get_employee');
+        Route::get('/compensationTypes', [PayrollSheetController::class, 'get_all_compensatation_types'])->name('admin.get_all_compensations');
+        Route::get('/agencyTypes', [PayrollSheetController::class, 'get_all_agency_types'])->name('admin.get_all_agency_types');
+        Route::get('/deductionTypes', [PayrollSheetController::class, 'get_all_deduction_types'])->name('admin.get_all_deduction_types');
 
         //export to excel
         Route::get('/export-salary-grades', [SalaryGradeController::class, 'exportToExcel'])->name('export.salary_grades');
-
-        Route::get('/employee/{id}', [PayrollSheetController::class, 'get_employee'])->name('admin.get_employee');
-        Route::get('/compensationTypes', [PayrollSheetController::class, 'get_all_compensatation_types'])->name('admin.get_all_compensations');
     });
 
     Route::prefix('employee')->group(function () {

@@ -29,6 +29,7 @@ import {
     CommandItem,
     CommandList,
 } from "@/Components/ui/command";
+import { Skeleton } from "@/Components/ui/skeleton";
 
 interface EmployeesListTypes {
     appointment_code: number;
@@ -62,12 +63,29 @@ const EmployeeListContext = createContext<EmployeeListContextTypes>(
     {} as EmployeeListContextTypes
 );
 
-function BoxSelection({ base }: { base: any }) {
+function BoxSelection({
+    base,
+    setBase,
+    applied,
+    setApplied,
+    baseTitle,
+    appliedTitle,
+    loading,
+}: {
+    base: any;
+    setBase: any;
+    applied: any;
+    setApplied: any;
+    baseTitle: string;
+    appliedTitle: string;
+    loading?: any;
+}) {
+    console.log(loading + ": " + baseTitle);
     return (
         <div className="grid grid-cols-2 gap-3">
             <section className="border border-slate-300 rounded-sm p-2">
                 <section className="flex flex-col items-center">
-                    <Label>Applied Compensations</Label>
+                    <Label>{appliedTitle}</Label>
                     <section className=" w-full">
                         <Command>
                             <CommandInput
@@ -77,16 +95,38 @@ function BoxSelection({ base }: { base: any }) {
                             <CommandList className="min-h-28 max-h-28 scrollbar-thumb-rounded-full scrollbar-thin scrollbar-thumb-secondaryGreen scrollbar-track-transparent overflow-y-scroll">
                                 <CommandEmpty>No results found.</CommandEmpty>
                                 <CommandGroup>
-                                    {base.map((item: any) => (
-                                        <CommandItem
-                                            key={item.compensation_code}
-                                            onDoubleClick={() =>
-                                                console.log("Clicked")
-                                            }
-                                        >
-                                            {item.name}
+                                    {loading ? (
+                                        <CommandItem>
+                                            <Skeleton className="w-[200px] h-[100px]"></Skeleton>
                                         </CommandItem>
-                                    ))}
+                                    ) : (
+                                        applied.map((item: any) => (
+                                            <CommandItem
+                                                key={item.id}
+                                                onMouseDown={() => {
+                                                    setApplied((prev: any) =>
+                                                        prev.filter(
+                                                            (prevItem: any) =>
+                                                                prevItem != item
+                                                        )
+                                                    );
+                                                    setBase(
+                                                        (prev: any) =>
+                                                            (prev = [
+                                                                ...prev,
+                                                                item,
+                                                            ].sort((a, b) =>
+                                                                a.name.localeCompare(
+                                                                    b.name
+                                                                )
+                                                            ))
+                                                    );
+                                                }}
+                                            >
+                                                {item.name}
+                                            </CommandItem>
+                                        ))
+                                    )}
                                 </CommandGroup>
                             </CommandList>
                         </Command>
@@ -95,7 +135,7 @@ function BoxSelection({ base }: { base: any }) {
             </section>
             <section className="border border-slate-300 rounded-sm p-2">
                 <section className="flex flex-col items-center">
-                    <Label>Compensations</Label>
+                    <Label>{baseTitle}</Label>
                     <section className=" w-full">
                         <Command>
                             <CommandInput
@@ -103,11 +143,48 @@ function BoxSelection({ base }: { base: any }) {
                                 className="border-transparent"
                             />
                             <CommandList className="min-h-28 max-h-28 scrollbar-thumb-rounded-full scrollbar-thin scrollbar-thumb-secondaryGreen scrollbar-track-transparent overflow-y-scroll">
-                                <CommandEmpty>No results found.</CommandEmpty>
+                                <CommandEmpty>
+                                    {loading ? (
+                                        <CommandItem>
+                                            <Skeleton className="w-[200px] h-[100px]"></Skeleton>
+                                        </CommandItem>
+                                    ) : (
+                                        "No results found."
+                                    )}
+                                </CommandEmpty>
                                 <CommandGroup>
-                                    {base.map((item: any) => (
-                                        <CommandItem>{item.name}</CommandItem>
-                                    ))}
+                                    {loading ? (
+                                        <CommandItem>
+                                            <Skeleton className="w-[200px] h-[100px]"></Skeleton>
+                                        </CommandItem>
+                                    ) : (
+                                        base.map((item: any) => (
+                                            <CommandItem
+                                                key={Math.random().toString(36)}
+                                                onMouseDown={() => {
+                                                    setBase((prev: any) =>
+                                                        prev.filter(
+                                                            (prevItem: any) =>
+                                                                prevItem != item
+                                                        )
+                                                    );
+                                                    setApplied(
+                                                        (prev: any) =>
+                                                            (prev = [
+                                                                ...prev,
+                                                                item,
+                                                            ].sort((a, b) =>
+                                                                a.name.localeCompare(
+                                                                    b.name
+                                                                )
+                                                            ))
+                                                    );
+                                                }}
+                                            >
+                                                {item.name}
+                                            </CommandItem>
+                                        ))
+                                    )}
                                 </CommandGroup>
                             </CommandList>
                         </Command>
@@ -121,8 +198,6 @@ function BoxSelection({ base }: { base: any }) {
 const EmployeesList = () => {
     const [data, setData] = useState<Array<EmployeesListTypes>>([]);
     const [loading, setLoading] = useState(true);
-    const [baseItems, setBaseItems] = useState<Array<string>>([]);
-    const [selectedItems, setSelectedItems] = useState<Array<string>>([]);
     const [selectedName, setSelectedName] = useState<String>("");
     const [selectedEmployee, setSelectedEmployee] = useState<
         number | undefined
@@ -133,6 +208,54 @@ const EmployeesList = () => {
     >([]);
 
     const [compensationList, setCompensationList] = useState<Array<any>>([]);
+
+    const [appliedCompensation, setAppliedCompensation] = useState<Array<any>>(
+        []
+    );
+
+    const [agencyShareTypes, setAgencyShareTypes] = useState<Array<any>>([]);
+
+    const [appliedAgencyShareTypes, setAppliedAgencyShareTypes] = useState<
+        Array<any>
+    >([]);
+
+    const [deductionTypes, setDeductionTypes] = useState<Array<any>>([]);
+
+    const [appliedDeductionTypes, setAppliedDeductionTypes] = useState<
+        Array<any>
+    >([]);
+
+    const [deductionLoading, setDeductionLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(
+                    route("admin.get_all_deduction_types")
+                );
+                setDeductionTypes(response.data.data);
+                setDeductionLoading(true);
+            } catch (error) {
+                console.log(error);
+            }
+            setDeductionLoading(false);
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(
+                    route("admin.get_all_agency_types")
+                );
+                setAgencyShareTypes(response.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -262,12 +385,28 @@ const EmployeesList = () => {
                                         <TabsContent value="compensations">
                                             <BoxSelection
                                                 base={compensationList}
-                                            ></BoxSelection>
+                                                setBase={setCompensationList}
+                                                applied={appliedCompensation}
+                                                setApplied={
+                                                    setAppliedCompensation
+                                                }
+                                                baseTitle="Compensations"
+                                                appliedTitle="Applied Compensations"
+                                            />
                                         </TabsContent>
                                         <TabsContent value="agencyshare">
                                             <BoxSelection
-                                                base={compensationList}
-                                            ></BoxSelection>
+                                                base={agencyShareTypes}
+                                                setBase={setAgencyShareTypes}
+                                                applied={
+                                                    appliedAgencyShareTypes
+                                                }
+                                                setApplied={
+                                                    setAppliedAgencyShareTypes
+                                                }
+                                                baseTitle="Agency Shares"
+                                                appliedTitle="Applied Agency Shares"
+                                            />
                                         </TabsContent>
                                     </Tabs>
                                 </div>
@@ -282,16 +421,16 @@ const EmployeesList = () => {
                                             </TabsTrigger>
                                         </TabsList>
                                         <TabsContent value="deductions">
-                                            <IncludeExcludeBox
-                                                baseItems={baseItems}
-                                                selectedItems={selectedItems}
-                                                setBaseItems={setBaseItems}
-                                                setSelectedItems={
-                                                    setSelectedItems
+                                            <BoxSelection
+                                                loading={deductionLoading}
+                                                base={deductionTypes}
+                                                setBase={setDeductionTypes}
+                                                applied={appliedDeductionTypes}
+                                                setApplied={
+                                                    setAppliedDeductionTypes
                                                 }
-                                                selectedItemsName="Payroll Deductions"
-                                                baseItemsName="Deductions"
-                                                className="h-[200px] w-full"
+                                                baseTitle="Deductions"
+                                                appliedTitle="Applied Deductions"
                                             />
                                         </TabsContent>
                                     </Tabs>

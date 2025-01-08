@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Payroll;
 
 use App\Http\Controllers\Controller;
+use App\Models\AgencyShare;
 use App\Models\CompensationType;
+use App\Models\DeductionType;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\PayrollSheet;
 use Inertia\Inertia;
 use Inertia\Response;
-use Number;
 
 class PayrollSheetController extends Controller
 {
@@ -49,6 +50,20 @@ class PayrollSheetController extends Controller
         $compensation_types = CompensationType::all();
 
         return response()->json(['data' => $compensation_types]);
+    }
+
+    public function get_all_agency_types()
+    {
+        $agency_types = AgencyShare::all();
+
+        return response()->json(['data' => $agency_types]);
+    }
+
+    public function get_all_deduction_types()
+    {
+        $deduction_types = DeductionType::all();
+
+        return response()->json(['data' => $deduction_types]);
     }
 
     /**
