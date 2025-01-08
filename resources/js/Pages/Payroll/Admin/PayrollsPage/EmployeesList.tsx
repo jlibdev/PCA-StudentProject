@@ -78,7 +78,17 @@ function BoxSelection({ base }: { base: any }) {
                                 <CommandEmpty>No results found.</CommandEmpty>
                                 <CommandGroup>
                                     {base.map((item: any) => (
-                                        <CommandItem>{item.name}</CommandItem>
+                                        <CommandItem
+                                            key={item.compensation_code}
+                                            onDoubleClick={() =>
+                                                (base = base.filter(
+                                                    (itembase) =>
+                                                        itembase != item
+                                                ))
+                                            }
+                                        >
+                                            {item.name}
+                                        </CommandItem>
                                     ))}
                                 </CommandGroup>
                             </CommandList>
