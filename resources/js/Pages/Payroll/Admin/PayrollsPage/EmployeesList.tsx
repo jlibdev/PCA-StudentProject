@@ -81,10 +81,7 @@ function BoxSelection({ base }: { base: any }) {
                                         <CommandItem
                                             key={item.compensation_code}
                                             onDoubleClick={() =>
-                                                (base = base.filter(
-                                                    (itembase) =>
-                                                        itembase != item
-                                                ))
+                                                console.log("Clicked")
                                             }
                                         >
                                             {item.name}
