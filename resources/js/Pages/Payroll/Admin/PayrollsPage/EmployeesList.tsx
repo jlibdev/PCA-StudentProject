@@ -299,6 +299,12 @@ const EmployeesList = () => {
         }
     };
 
+    useEffect(() => {
+        if (!data.includes(selectedName)) {
+            setSelectedName(null);
+        }
+    }, [data]);
+
     return (
         <TableContext.Provider value={{ data, setData }}>
             <EmployeeListContext.Provider

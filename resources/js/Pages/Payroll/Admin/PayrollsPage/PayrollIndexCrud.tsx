@@ -6,7 +6,6 @@ import SignatoriesProperty from "./SignatoriesProperties";
 import EmployeesList from "./EmployeesList";
 import useCheckbox from "@/hooks/use-checkbox";
 import useDatePicker from "@/hooks/use-datepicker";
-import { useState } from "react";
 
 export const PayrollsIndexStore = ({ openDialog }: { openDialog: any }) => {
     const { data, setData, errors, processing } = useForm({});
