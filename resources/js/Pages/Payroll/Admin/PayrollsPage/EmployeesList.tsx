@@ -11,7 +11,6 @@ import {
 } from "@tanstack/react-table";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
-import IncludeExcludeBox from "@/Components/IncludeExcludeBox";
 
 import {
     Accordion,
@@ -70,7 +69,6 @@ function BoxSelection({
     setApplied,
     baseTitle,
     appliedTitle,
-    loading,
 }: {
     base: any;
     setBase: any;
@@ -78,9 +76,7 @@ function BoxSelection({
     setApplied: any;
     baseTitle: string;
     appliedTitle: string;
-    loading?: any;
 }) {
-    console.log(loading + ": " + baseTitle);
     return (
         <div className="grid grid-cols-2 gap-3">
             <section className="border border-slate-300 rounded-sm p-2">
@@ -95,38 +91,33 @@ function BoxSelection({
                             <CommandList className="min-h-28 max-h-28 scrollbar-thumb-rounded-full scrollbar-thin scrollbar-thumb-secondaryGreen scrollbar-track-transparent overflow-y-scroll">
                                 <CommandEmpty>No results found.</CommandEmpty>
                                 <CommandGroup>
-                                    {loading ? (
-                                        <CommandItem>
-                                            <Skeleton className="w-[200px] h-[100px]"></Skeleton>
+                                    {applied.map((item: any) => (
+                                        <CommandItem
+                                            className="cursor-pointer"
+                                            key={Math.random().toString(36)}
+                                            onMouseDown={() => {
+                                                setApplied((prev: any) =>
+                                                    prev.filter(
+                                                        (prevItem: any) =>
+                                                            prevItem != item
+                                                    )
+                                                );
+                                                setBase(
+                                                    (prev: any) =>
+                                                        (prev = [
+                                                            ...prev,
+                                                            item,
+                                                        ].sort((a, b) =>
+                                                            a.name.localeCompare(
+                                                                b.name
+                                                            )
+                                                        ))
+                                                );
+                                            }}
+                                        >
+                                            {item.name}
                                         </CommandItem>
-                                    ) : (
-                                        applied.map((item: any) => (
-                                            <CommandItem
-                                                key={item.id}
-                                                onMouseDown={() => {
-                                                    setApplied((prev: any) =>
-                                                        prev.filter(
-                                                            (prevItem: any) =>
-                                                                prevItem != item
-                                                        )
-                                                    );
-                                                    setBase(
-                                                        (prev: any) =>
-                                                            (prev = [
-                                                                ...prev,
-                                                                item,
-                                                            ].sort((a, b) =>
-                                                                a.name.localeCompare(
-                                                                    b.name
-                                                                )
-                                                            ))
-                                                    );
-                                                }}
-                                            >
-                                                {item.name}
-                                            </CommandItem>
-                                        ))
-                                    )}
+                                    ))}
                                 </CommandGroup>
                             </CommandList>
                         </Command>
@@ -143,48 +134,35 @@ function BoxSelection({
                                 className="border-transparent"
                             />
                             <CommandList className="min-h-28 max-h-28 scrollbar-thumb-rounded-full scrollbar-thin scrollbar-thumb-secondaryGreen scrollbar-track-transparent overflow-y-scroll">
-                                <CommandEmpty>
-                                    {loading ? (
-                                        <CommandItem>
-                                            <Skeleton className="w-[200px] h-[100px]"></Skeleton>
-                                        </CommandItem>
-                                    ) : (
-                                        "No results found."
-                                    )}
-                                </CommandEmpty>
+                                <CommandEmpty>No results found.</CommandEmpty>
                                 <CommandGroup>
-                                    {loading ? (
-                                        <CommandItem>
-                                            <Skeleton className="w-[200px] h-[100px]"></Skeleton>
+                                    {base.map((item: any) => (
+                                        <CommandItem
+                                            className="cursor-pointer"
+                                            key={Math.random().toString(36)}
+                                            onMouseDown={() => {
+                                                setBase((prev: any) =>
+                                                    prev.filter(
+                                                        (prevItem: any) =>
+                                                            prevItem != item
+                                                    )
+                                                );
+                                                setApplied(
+                                                    (prev: any) =>
+                                                        (prev = [
+                                                            ...prev,
+                                                            item,
+                                                        ].sort((a, b) =>
+                                                            a.name.localeCompare(
+                                                                b.name
+                                                            )
+                                                        ))
+                                                );
+                                            }}
+                                        >
+                                            {item.name}
                                         </CommandItem>
-                                    ) : (
-                                        base.map((item: any) => (
-                                            <CommandItem
-                                                key={Math.random().toString(36)}
-                                                onMouseDown={() => {
-                                                    setBase((prev: any) =>
-                                                        prev.filter(
-                                                            (prevItem: any) =>
-                                                                prevItem != item
-                                                        )
-                                                    );
-                                                    setApplied(
-                                                        (prev: any) =>
-                                                            (prev = [
-                                                                ...prev,
-                                                                item,
-                                                            ].sort((a, b) =>
-                                                                a.name.localeCompare(
-                                                                    b.name
-                                                                )
-                                                            ))
-                                                    );
-                                                }}
-                                            >
-                                                {item.name}
-                                            </CommandItem>
-                                        ))
-                                    )}
+                                    ))}
                                 </CommandGroup>
                             </CommandList>
                         </Command>
@@ -198,7 +176,7 @@ function BoxSelection({
 const EmployeesList = () => {
     const [data, setData] = useState<Array<EmployeesListTypes>>([]);
     const [loading, setLoading] = useState(true);
-    const [selectedName, setSelectedName] = useState<String>("");
+    const [selectedName, setSelectedName] = useState<any>(null);
     const [selectedEmployee, setSelectedEmployee] = useState<
         number | undefined
     >(undefined);
@@ -225,8 +203,6 @@ const EmployeesList = () => {
         Array<any>
     >([]);
 
-    const [deductionLoading, setDeductionLoading] = useState<boolean>(false);
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -234,11 +210,9 @@ const EmployeesList = () => {
                     route("admin.get_all_deduction_types")
                 );
                 setDeductionTypes(response.data.data);
-                setDeductionLoading(true);
             } catch (error) {
                 console.log(error);
             }
-            setDeductionLoading(false);
         };
         fetchData();
     }, []);
@@ -300,9 +274,7 @@ const EmployeesList = () => {
     });
 
     function handleRowSelect(data: any) {
-        var full_name =
-            data.original.first_name + " " + data.original.last_name;
-        setSelectedName(full_name);
+        setSelectedName(data.original);
     }
 
     const handleAddButton = async () => {
@@ -365,14 +337,20 @@ const EmployeesList = () => {
 
                         <div className="flex flex-col gap-3">
                             <Label className="text-xl my-2">
-                                Selected: {selectedName}
+                                {cn(
+                                    "Selected: ",
+                                    selectedName &&
+                                        selectedName.first_name +
+                                            " " +
+                                            selectedName.last_name
+                                )}
                             </Label>
 
                             <section className=" w-full h-[500px] grid grid-rows-2 p-2 gap-5">
                                 <div>
                                     <Tabs
                                         defaultValue="compensations"
-                                        className="w-full"
+                                        className=" w-full h-full"
                                     >
                                         <TabsList>
                                             <TabsTrigger value="compensations">
@@ -382,56 +360,101 @@ const EmployeesList = () => {
                                                 Agency Share
                                             </TabsTrigger>
                                         </TabsList>
-                                        <TabsContent value="compensations">
-                                            <BoxSelection
-                                                base={compensationList}
-                                                setBase={setCompensationList}
-                                                applied={appliedCompensation}
-                                                setApplied={
-                                                    setAppliedCompensation
-                                                }
-                                                baseTitle="Compensations"
-                                                appliedTitle="Applied Compensations"
-                                            />
+                                        <TabsContent
+                                            value="compensations"
+                                            className="w-full h-[calc(100%-20%)]"
+                                        >
+                                            {!selectedName ? (
+                                                <div className=" w-full h-full grid grid-cols-2 gap-3">
+                                                    <Skeleton className="w-full h-full"></Skeleton>
+                                                    <Skeleton className="w-full h-full"></Skeleton>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <BoxSelection
+                                                        base={compensationList}
+                                                        setBase={
+                                                            setCompensationList
+                                                        }
+                                                        applied={
+                                                            appliedCompensation
+                                                        }
+                                                        setApplied={
+                                                            setAppliedCompensation
+                                                        }
+                                                        baseTitle="Compensations"
+                                                        appliedTitle="Applied Compensations"
+                                                    />
+                                                </>
+                                            )}
                                         </TabsContent>
-                                        <TabsContent value="agencyshare">
-                                            <BoxSelection
-                                                base={agencyShareTypes}
-                                                setBase={setAgencyShareTypes}
-                                                applied={
-                                                    appliedAgencyShareTypes
-                                                }
-                                                setApplied={
-                                                    setAppliedAgencyShareTypes
-                                                }
-                                                baseTitle="Agency Shares"
-                                                appliedTitle="Applied Agency Shares"
-                                            />
+                                        <TabsContent
+                                            value="agencyshare"
+                                            className="w-full h-[calc(100%-20%)]"
+                                        >
+                                            {!selectedName ? (
+                                                <div className=" w-full h-full grid grid-cols-2 gap-3">
+                                                    <Skeleton className="w-full h-full"></Skeleton>
+                                                    <Skeleton className="w-full h-full"></Skeleton>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <BoxSelection
+                                                        base={agencyShareTypes}
+                                                        setBase={
+                                                            setAgencyShareTypes
+                                                        }
+                                                        applied={
+                                                            appliedAgencyShareTypes
+                                                        }
+                                                        setApplied={
+                                                            setAppliedAgencyShareTypes
+                                                        }
+                                                        baseTitle="Agency Shares"
+                                                        appliedTitle="Applied Agency Shares"
+                                                    />
+                                                </>
+                                            )}
                                         </TabsContent>
                                     </Tabs>
                                 </div>
                                 <div>
                                     <Tabs
                                         defaultValue="deductions"
-                                        className="w-full"
+                                        className=" w-full h-full"
                                     >
                                         <TabsList>
                                             <TabsTrigger value="deductions">
                                                 Deductions
                                             </TabsTrigger>
                                         </TabsList>
-                                        <TabsContent value="deductions">
-                                            <BoxSelection
-                                                loading={deductionLoading}
-                                                base={deductionTypes}
-                                                setBase={setDeductionTypes}
-                                                applied={appliedDeductionTypes}
-                                                setApplied={
-                                                    setAppliedDeductionTypes
-                                                }
-                                                baseTitle="Deductions"
-                                                appliedTitle="Applied Deductions"
-                                            />
+                                        <TabsContent
+                                            value="deductions"
+                                            className="w-full h-[calc(100%-20%)]"
+                                        >
+                                            {!selectedName ? (
+                                                <div className=" w-full h-full grid grid-cols-2 gap-3">
+                                                    <Skeleton className="w-full h-full"></Skeleton>
+                                                    <Skeleton className="w-full h-full"></Skeleton>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <BoxSelection
+                                                        base={deductionTypes}
+                                                        setBase={
+                                                            setDeductionTypes
+                                                        }
+                                                        applied={
+                                                            appliedDeductionTypes
+                                                        }
+                                                        setApplied={
+                                                            setAppliedDeductionTypes
+                                                        }
+                                                        baseTitle="Deductions"
+                                                        appliedTitle="Applied Deductions"
+                                                    />
+                                                </>
+                                            )}
                                         </TabsContent>
                                     </Tabs>
                                 </div>

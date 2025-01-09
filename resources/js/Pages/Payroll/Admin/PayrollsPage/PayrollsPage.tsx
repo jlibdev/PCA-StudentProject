@@ -119,7 +119,6 @@ const PayrollsPage = () => {
         console.log(data.original);
     }
 
-    
     return (
         <AuthenticatedLayout
             pageTitle="Payrolls Index"
