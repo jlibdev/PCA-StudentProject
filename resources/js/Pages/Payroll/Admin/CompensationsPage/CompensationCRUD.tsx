@@ -27,8 +27,7 @@ export function CompensationStore({ openDialog }: { openDialog: any }) {
                         </div>
                         <div className="flex">
                             <span className="pl-6">
-                                Compensation Type {data.name} has
-                                been added!
+                                Compensation Type {data.name} has been added!
                             </span>
                         </div>
                     </div>,
@@ -85,7 +84,7 @@ export function CompensationUpdate({
     setOpenDialog: any;
 }) {
     const { data, setData, put, processing, errors, reset } = useForm({
-        name: "NIGGA",
+        name: "joshua",
         shorthand: "FOK",
         is_taxable: false,
         is_fixed: false,
@@ -120,7 +119,7 @@ export function CompensationUpdate({
                     "shorthand",
                     "fixed_amount",
                     "is_taxable",
-                    "is_fixed",
+                    "is_fixed"
                 );
                 setOpenDialog(false);
             },

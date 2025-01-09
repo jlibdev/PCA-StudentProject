@@ -26,7 +26,7 @@ export function AgencyShareStore({
             name: "power",
             shorthand: "PWR",
             is_mandatory: false,
-            compensation_links: ["niggalations"] as Array<string>,
+            compensation_links: ["sfhisdhfisdhf"] as Array<string>,
             fixed_amount: 300,
             remittance_percentage: 0.1,
             ceiling_amount: 10.11,
@@ -36,10 +36,7 @@ export function AgencyShareStore({
 
         data.compensation_links = [...selectedItems];
 
-        if (
-            data.remittance_percentage == 0 &&
-            data.ceiling_amount == 0
-        ) {
+        if (data.remittance_percentage == 0 && data.ceiling_amount == 0) {
             setError(
                 "remittance_percentage",
                 "Amount and remittance must not be zero at the same time."
@@ -57,8 +54,7 @@ export function AgencyShareStore({
                         </div>
                         <div className="flex">
                             <span className="pl-6">
-                                Agency Share {data.name} has been
-                                Added
+                                Agency Share {data.name} has been Added
                             </span>
                         </div>
                     </div>,

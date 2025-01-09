@@ -15,6 +15,7 @@ export const PayrollsIndexStore = ({ openDialog }: { openDialog: any }) => {
         datePaid: false,
         includeMandatory: false,
     });
+
     const { dates, setDate } = useDatePicker({
         startingDate: new Date(),
         endingDate: new Date(),

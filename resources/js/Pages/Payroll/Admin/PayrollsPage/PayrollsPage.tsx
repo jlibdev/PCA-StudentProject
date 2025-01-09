@@ -13,7 +13,6 @@ import {
     getCoreRowModel,
     getFilteredRowModel,
     getSortedRowModel,
-    RowData,
     useReactTable,
 } from "@tanstack/react-table";
 import { MoreHorizontal, Plus } from "lucide-react";
@@ -21,6 +20,16 @@ import { useState } from "react";
 import { Button } from "@/Components/ui/button";
 import { Label } from "@/Components/ui/label";
 import { PayrollsIndexStore } from "./PayrollIndexCrud";
+import useCheckbox from "@/hooks/use-checkbox";
+
+export function PayrollsPageProvider() {
+    const { checkbox, setCheckbox } = useCheckbox({
+        datePosted: false,
+        datePaid: false,
+        includeMandatory: false,
+    });
+    return <></>;
+}
 
 const PayrollsPage = () => {
     const [data, setData] = useState<Array<payrollIndexTypes>>([

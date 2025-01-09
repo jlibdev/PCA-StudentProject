@@ -25,9 +25,9 @@ export function AppointmentStore({
     compensationTypes: Array<string>;
 }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        type: "Nigga",
+        type: "joshua",
         compensation_code: 1,
-        has_mandatory_deduction: true ,
+        has_mandatory_deduction: true,
     });
 
     const changeBasicPayType = (value: string) => {
@@ -47,18 +47,13 @@ export function AppointmentStore({
                         </div>
                         <div className="flex">
                             <span className="pl-6">
-                                Appointment Type {data.type} has
-                                been added!
+                                Appointment Type {data.type} has been added!
                             </span>
                         </div>
                     </div>,
                     { duration: 2000 }
                 );
-                reset(
-                    "type",
-                    "has_mandatory_deduction",
-                    "compensation_code"
-                );
+                reset("type", "has_mandatory_deduction", "compensation_code");
                 openDialog(false);
             },
             onError: () => {
@@ -235,10 +230,7 @@ export function AppointmentUpdate({
                             ))}
                         </SelectContent>
                     </Select>
-                    <InputError
-                        message={errors.type}
-                        className="mt-2"
-                    />
+                    <InputError message={errors.type} className="mt-2" />
                 </div>
 
                 <div>

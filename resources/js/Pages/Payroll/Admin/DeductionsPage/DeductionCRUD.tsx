@@ -22,13 +22,13 @@ export function DeductionStore({
 }) {
     const { data, setData, post, processing, errors, reset, setError } =
         useForm({
-            name: "FUKENS",
+            name: "joash",
             shorthand: "FKPO",
             fixed_amount: 2000,
             is_mandatory: false,
-            remittance_percent: 0.10,
+            remittance_percent: 0.1,
             ceiling_amount: 0.13,
-            compensation_link: ["nigga", "poweorjkn"] as Array<string>,
+            compensation_link: ["joash", "poweorjkn"] as Array<string>,
         });
 
     const submit: FormEventHandler = (e) => {
@@ -61,8 +61,7 @@ export function DeductionStore({
                         </div>
                         <div className="flex">
                             <span className="pl-6">
-                                Deduction Type {data.name} has been
-                                added!
+                                Deduction Type {data.name} has been added!
                             </span>
                         </div>
                     </div>,
@@ -153,9 +152,9 @@ export function DeductionUpdate({
         shorthand: "Nwpeor",
         fixed_amount: 2000,
         is_mandatory: false,
-        remittance_percent: 0.10,
+        remittance_percent: 0.1,
         ceiling_amount: 0.13,
-        compensation_links: ["nigga"] as Array<string>,
+        compensation_links: ["asdhkjasd"] as Array<string>,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -196,8 +195,8 @@ export function DeductionUpdate({
                         </div>
                         <div className="flex">
                             <span className="pl-6">
-                                Deduction type {data.name} has been
-                                succesfully edited.
+                                Deduction type {data.name} has been succesfully
+                                edited.
                             </span>
                         </div>
                     </div>,
