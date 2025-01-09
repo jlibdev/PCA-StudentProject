@@ -4,24 +4,24 @@ import { useForm } from "@inertiajs/react";
 import PayrollProperties from "./PayrollProperties";
 import SignatoriesProperty from "./SignatoriesProperties";
 import EmployeesList from "./EmployeesList";
-import useCheckbox from "@/hooks/use-checkbox";
 import useDatePicker from "@/hooks/use-datepicker";
+import { useContext, useState } from "react";
 
 export const PayrollsIndexStore = ({ openDialog }: { openDialog: any }) => {
     const { data, setData, errors, processing } = useForm({});
 
-    const { checkbox, setCheckbox } = useCheckbox({
-        datePosted: false,
-        datePaid: false,
-        includeMandatory: false,
-    });
+    // const { checkbox, setCheckbox } = useCheckbox({
+    //     datePosted: false,
+    //     datePaid: false,
+    //     includeMandatory: false,
+    // });
 
-    const { dates, setDate } = useDatePicker({
-        startingDate: new Date(),
-        endingDate: new Date(),
-        datePosted: new Date(),
-        datePaid: new Date(),
-    });
+    // const { dates, setDate } = useDatePicker({
+    //     startingDate: new Date(),
+    //     endingDate: new Date(),
+    //     datePosted: new Date(),
+    //     datePaid: new Date(),
+    // });
 
     return (
         <form action="">
@@ -31,12 +31,7 @@ export const PayrollsIndexStore = ({ openDialog }: { openDialog: any }) => {
                     <TabsTrigger value="Employees">Employees List</TabsTrigger>
                 </TabsList>
                 <TabsContent value="Properties">
-                    <PayrollProperties
-                        checkbox={checkbox}
-                        setCheckbox={setCheckbox}
-                        dates={dates}
-                        setDate={setDate}
-                    />
+                    <PayrollProperties />
                     <SignatoriesProperty />
                 </TabsContent>
                 <TabsContent value="Employees">

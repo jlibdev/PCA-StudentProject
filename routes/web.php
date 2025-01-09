@@ -104,6 +104,7 @@ Route::domain('payroll.' . env('APP_URL'))->group(function () {
         Route::get('/compensationTypes', [PayrollSheetController::class, 'get_all_compensatation_types'])->name('admin.get_all_compensations');
         Route::get('/agencyTypes', [PayrollSheetController::class, 'get_all_agency_types'])->name('admin.get_all_agency_types');
         Route::get('/deductionTypes', [PayrollSheetController::class, 'get_all_deduction_types'])->name('admin.get_all_deduction_types');
+        Route::get('/signatories', [PayrollSheetController::class, 'get_all_signatories'])->name('admin.get_signatories');
 
         //export to excel
         Route::get('/export-salary-grades', [SalaryGradeController::class, 'exportToExcel'])->name('export.salary_grades');

@@ -9,6 +9,8 @@ use App\Models\DeductionType;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\PayrollSheet;
+use App\Models\SignatoriesModel;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -66,6 +68,11 @@ class PayrollSheetController extends Controller
         return response()->json(['data' => $deduction_types]);
     }
 
+    public function get_all_signatories()
+    {
+        $signatory_types = collect(DB::select('SELECT * FROM signatories'));
+        return response()->json(['data' => $signatory_types]);
+    }
     /**
      * Show the form for creating a new resource.
      */

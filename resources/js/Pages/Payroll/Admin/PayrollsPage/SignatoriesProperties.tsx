@@ -8,8 +8,30 @@ import {
     SelectValue,
 } from "@/Components/ui/select";
 import { Separator } from "@/Components/ui/separator";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { PayrollFormDataContext } from "./PayrollsPage";
 
 const SignatoriesProperty = () => {
+    const { data, setData } = useContext(PayrollFormDataContext);
+
+    const [signatories, setSignatories] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(
+                    route("admin.get_signatories")
+                );
+                setSignatories(response.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return (
         <div>
             <div className="grid grid-cols-3 items-center justify-center m-5">

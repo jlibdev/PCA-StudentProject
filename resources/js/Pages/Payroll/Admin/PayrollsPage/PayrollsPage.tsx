@@ -16,19 +16,56 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { MoreHorizontal, Plus } from "lucide-react";
-import { useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import { Button } from "@/Components/ui/button";
 import { Label } from "@/Components/ui/label";
 import { PayrollsIndexStore } from "./PayrollIndexCrud";
 import useCheckbox from "@/hooks/use-checkbox";
+import useDatePicker from "@/hooks/use-datepicker";
+import { useForm } from "@inertiajs/react";
 
-export function PayrollsPageProvider() {
-    const { checkbox, setCheckbox } = useCheckbox({
-        datePosted: false,
-        datePaid: false,
+export const CheckBoxContext = createContext<any>({} as any);
+export const DatePickerContext = createContext<any>({} as any);
+export const PayrollFormDataContext = createContext<any>({} as any);
+
+export function PayrollsPageProvider({ children }: { children: ReactNode }) {
+    const {
+        data,
+        setData,
+        processing,
+        errors,
+        post,
+        put,
+        delete: destroy,
+    } = useForm({
+        isdatePosted: false,
+        isdatePaid: false,
         includeMandatory: false,
+        startingDate: new Date(),
+        endingDate: new Date(),
+        datePosted: new Date(),
+        datePaid: new Date(),
+        type: "",
+        fundCluster: "",
+        payrollName: "",
+        payrollFormat: "",
     });
-    return <></>;
+
+    return (
+        <PayrollFormDataContext.Provider
+            value={{
+                data,
+                setData,
+                processing,
+                errors,
+                post,
+                put,
+                delete: destroy,
+            }}
+        >
+            {children}
+        </PayrollFormDataContext.Provider>
+    );
 }
 
 const PayrollsPage = () => {
@@ -129,49 +166,55 @@ const PayrollsPage = () => {
     }
 
     return (
-        <AuthenticatedLayout
-            pageTitle="Payrolls Index"
-            navigationType="payrollAdmin"
-        >
-            <div className="flex flex-col gap-5">
-                <div className="flex gap-5">
-                    <Input
-                        placeholder="Search...."
-                        onChange={(e) => setGlobalFilter(e.target.value || "")}
-                        type="search"
-                        className="w-1/4 rounded-pca"
-                    ></Input>
-                    <div className="w-full grid grid-cols-6 gap-3">
-                        <DialogMenu
-                            open={openDialog}
-                            dialogClassName="max-w-[calc(100%-5%)] h-[calc(100%-20%)]"
-                            openDialog={() => setOpenDialog(!openDialog)}
-                            title="New Payroll Index"
-                            trigger={
-                                <Button
-                                    className="gap-2 rounded-pca"
-                                    aria-label="New Payroll Index"
-                                >
-                                    <Plus size={20} />
-                                    <Label>New Payroll Index</Label>
-                                </Button>
+        <PayrollsPageProvider>
+            <AuthenticatedLayout
+                pageTitle="Payrolls Index"
+                navigationType="payrollAdmin"
+            >
+                <div className="flex flex-col gap-5">
+                    <div className="flex gap-5">
+                        <Input
+                            placeholder="Search...."
+                            onChange={(e) =>
+                                setGlobalFilter(e.target.value || "")
                             }
-                        >
-                            <PayrollsIndexStore
+                            type="search"
+                            className="w-1/4 rounded-pca"
+                        ></Input>
+                        <div className="w-full grid grid-cols-6 gap-3">
+                            <DialogMenu
+                                open={openDialog}
+                                dialogClassName="max-w-[calc(100%-5%)] h-[calc(100%-20%)]"
                                 openDialog={() => setOpenDialog(!openDialog)}
-                            />
-                        </DialogMenu>
+                                title="New Payroll Index"
+                                trigger={
+                                    <Button
+                                        className="gap-2 rounded-pca"
+                                        aria-label="New Payroll Index"
+                                    >
+                                        <Plus size={20} />
+                                        <Label>New Payroll Index</Label>
+                                    </Button>
+                                }
+                            >
+                                <PayrollsIndexStore
+                                    openDialog={() =>
+                                        setOpenDialog(!openDialog)
+                                    }
+                                />
+                            </DialogMenu>
+                        </div>
                     </div>
+                    <DataTable
+                        {...{
+                            table,
+                            rowStyle: "odd:bg-white even:bg-transparent",
+                            onMouseEnter: handleMouseEnter,
+                        }}
+                    ></DataTable>
                 </div>
-                <DataTable
-                    {...{
-                        table,
-                        rowStyle: "odd:bg-white even:bg-transparent",
-                        onMouseEnter: handleMouseEnter,
-                    }}
-                ></DataTable>
-            </div>
-        </AuthenticatedLayout>
+            </AuthenticatedLayout>
+        </PayrollsPageProvider>
     );
 };
 
