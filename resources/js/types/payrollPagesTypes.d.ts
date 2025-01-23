@@ -36,7 +36,6 @@ export interface dropDownDialogsTypes {
 }
 
 
-
 export interface appointmentTypes {
     appointment_code: number;
     type: string;
@@ -94,3 +93,4 @@ export interface employeesListTypes {
     last_name: string;
     
 }
+

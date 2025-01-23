@@ -25,7 +25,7 @@ class AppointmentController extends Controller
         $compensationTypes = CompensationType::pluck('name');
 
         // Return the data to the frontend
-        return Inertia::render('Payroll/Admin/AppointmentsPage/AppointmentsPage', ['data' => $data, 'compensationTypes' => $compensationTypes, csrf_token()]);
+        return Inertia::render('Payroll/Admin/AppointmentsPage/AppointmentsPage', ['data' => $data, 'name' => $compensationTypes]);
     }
 
     /**
@@ -33,6 +33,7 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
+        
         /* Validating the user request. */
         $validated = $request->validate([
             'type' => 'required|unique:appointments',

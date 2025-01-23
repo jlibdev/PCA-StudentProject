@@ -44,6 +44,8 @@ interface EmployeesListTypes {
     salary_type: string;
     station_code: number;
 }
+
+
 interface EmployeeListContextTypes {
     employeeslist: EmployeesListTypes[];
     setemployeeslist: React.Dispatch<
@@ -532,10 +534,6 @@ const columns: ColumnDef<EmployeesListTypes>[] = [
         },
     },
     {
-        // prevList.filter(
-        //     (item: EmployeesListTypes) =>
-        //         item.employee_code !== selectedEmployee
-        // )
         id: "actions",
         cell: ({ row }) => {
             const { employeeslist, setemployeeslist } =

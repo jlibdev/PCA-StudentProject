@@ -8,20 +8,7 @@ import useDatePicker from "@/hooks/use-datepicker";
 import { useContext, useState } from "react";
 
 export const PayrollsIndexStore = ({ openDialog }: { openDialog: any }) => {
-    const { data, setData, errors, processing } = useForm({});
-
-    // const { checkbox, setCheckbox } = useCheckbox({
-    //     datePosted: false,
-    //     datePaid: false,
-    //     includeMandatory: false,
-    // });
-
-    // const { dates, setDate } = useDatePicker({
-    //     startingDate: new Date(),
-    //     endingDate: new Date(),
-    //     datePosted: new Date(),
-    //     datePaid: new Date(),
-    // });
+    const { processing } = useForm({});
 
     return (
         <form action="">
