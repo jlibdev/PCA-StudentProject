@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Payroll;
-
 use App\Http\Controllers\Controller;
 use App\Models\SalaryGrade;
 use Inertia\Inertia;

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Payroll;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SignatoriesModel;
 use Inertia\Inertia;
-use Inertia\Response;
 
 class SignatoriesController extends Controller
 {
@@ -34,7 +34,7 @@ class SignatoriesController extends Controller
      */
     public function store(Request $request, int $signatory_code)
     {
-         // Validate incoming request data
+        // Validate incoming request data
         $validatedData = $request->validate([
             'signatory_template' => 'required|string|max:255',
             'signatory_A' => 'required|string|max:255',
@@ -59,7 +59,7 @@ class SignatoriesController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // 
     }
 
     /**
@@ -84,5 +84,13 @@ class SignatoriesController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function get_all_signatories_list()
+    {
+
+        $data = SignatoriesModel::all();
+
+        return response()->json(['signatories' => $data]);
     }
 }

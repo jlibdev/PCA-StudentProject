@@ -16,12 +16,10 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { MoreHorizontal, Plus } from "lucide-react";
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useState } from "react";
 import { Button } from "@/Components/ui/button";
 import { Label } from "@/Components/ui/label";
 import { PayrollsIndexStore } from "./PayrollIndexCrud";
-import useCheckbox from "@/hooks/use-checkbox";
-import useDatePicker from "@/hooks/use-datepicker";
 import { useForm } from "@inertiajs/react";
 
 export const CheckBoxContext = createContext<any>({} as any);

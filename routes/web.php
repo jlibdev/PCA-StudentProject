@@ -1,10 +1,7 @@
 <?php
 
-use App\Http\Controllers\Biometric\DashboardController;
-use App\Http\Controllers\Biometric\AttendanceListController;
-use App\Http\Controllers\Biometric\AttendanceRecordController;
-use App\Http\Controllers\Biometric\ManageUserController;
-use App\Http\Controllers\Payroll\PayrollSheetController;
+use App\Http\Controllers\PageController;
+use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 
 
@@ -19,11 +16,17 @@ use App\Http\Controllers\Payroll\EmployeeController;
 use App\Http\Controllers\Payroll\LoanController;
 use App\Http\Controllers\Payroll\SummaryController;
 use App\Http\Controllers\Payroll\PayrollController;
+use App\Http\Controllers\Payroll\PayrollSheetController;
+use App\Http\Controllers\Payroll\SignatoriesController;
 
 // Controllers: Biometrics
 use App\Http\Controllers\Biometrics\DailyTimeEntryController;
-use App\Http\Controllers\PageController;
-use Inertia\Inertia;
+use App\Http\Controllers\Biometric\DashboardController;
+use App\Http\Controllers\Biometric\AttendanceListController;
+use App\Http\Controllers\Biometric\AttendanceRecordController;
+use App\Http\Controllers\Biometric\ManageUserController;
+
+
 
 // ->middleware(['auth'])
 
@@ -103,7 +106,9 @@ Route::domain('payroll.' . env('APP_URL'))->group(function () {
         Route::get('/compensationTypes', [PayrollSheetController::class, 'get_all_compensatation_types'])->name('admin.get_all_compensations');
         Route::get('/agencyTypes', [PayrollSheetController::class, 'get_all_agency_types'])->name('admin.get_all_agency_types');
         Route::get('/deductionTypes', [PayrollSheetController::class, 'get_all_deduction_types'])->name('admin.get_all_deduction_types');
-        Route::get('/signatories', [PayrollSheetController::class, 'get_all_signatories'])->name('admin.get_signatories');
+
+        // Signatories Query Routes
+        Route::get("/signatories_list", [SignatoriesController::class, 'get_all_signatories_list'])->name('admin.get_all_signatories_list');
 
         //export to excel
         Route::get('/export-salary-grades', [SalaryGradeController::class, 'exportToExcel'])->name('export.salary_grades');

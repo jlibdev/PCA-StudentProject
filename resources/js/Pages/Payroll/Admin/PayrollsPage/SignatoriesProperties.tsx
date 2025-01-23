@@ -16,19 +16,19 @@ const SignatoriesProperty = () => {
     const { data, setData } = useContext(PayrollFormDataContext);
 
     const [signatories, setSignatories] = useState([]);
+    const [selectedSignatory, setSelectedSignatory] = useState();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(
-                    route("admin.get_signatories")
+                    route("admin.get_all_signatories_list")
                 );
-                setSignatories(response.data.data);
+                setSignatories(response.data.signatories);
             } catch (error) {
                 console.log(error);
             }
         };
-
         fetchData();
     }, []);
 
@@ -48,30 +48,27 @@ const SignatoriesProperty = () => {
                             <SelectValue placeholder="Select signatory template"></SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="Sig1">Sig1</SelectItem>
-                            <SelectItem value="Sig2">Sig2</SelectItem>
-                            <SelectItem value="Sig3">Sig3</SelectItem>
+                            {signatories.map((signatory: any) => (
+                                <SelectItem
+                                    value={signatory.name}
+                                    key={signatory.signatory_code}
+                                    onMouseDown={() =>
+                                        setSelectedSignatory(signatory)
+                                    }
+                                >
+                                    {signatory.name}
+                                </SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                 </section>
                 <section className="flex flex-col gap-3">
                     <Label>Payslip Template</Label>
-                    <Select>
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select signatory template"></SelectValue>
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="Sig1">Sig1</SelectItem>
-                            <SelectItem value="Sig2">Sig2</SelectItem>
-                            <SelectItem value="Sig3">Sig3</SelectItem>
-                        </SelectContent>
-                    </Select>
                 </section>
 
                 <section className="grid grid-cols-2">
                     <section className="flex flex-col gap-3 m-2">
                         <Label>Prepared by</Label>
-                        <Input></Input>
                         <Separator></Separator>
                         <Label className="flex justify-center">Position</Label>
                     </section>
