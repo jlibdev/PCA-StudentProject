@@ -45,6 +45,8 @@ Route::middleware('auth')->group(function () {
 });
 
 // Catch-All Route (Only define after all specific routes)
-Route::fallback(function () {
-    return redirect('/');
+Route::middleware(['usercheck:guest'])->group(function () {
+    Route::get('/{any}', function ($any) {
+        return redirect('/');
+    })->where('any', '.*');  // This allows matching all routes
 });

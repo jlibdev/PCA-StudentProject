@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('contracts', function (Blueprint $table) {
             $table->id('contract_code');
 
-			$table->date('start_date');
-			$table->date('end_date');
-
 			$table->foreignId('employee_code')->constrained('employees')->references('employee_code');
+
+            $table->date('start_date');
+			$table->date('end_date');
 
             $table->timestamps();
         });

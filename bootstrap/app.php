@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\PreventAuthenticatedAccess;
 use App\Http\Middleware\UserRoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -17,7 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
         $middleware->alias([
-            'usercheck' => UserRoleMiddleware::class
+            'usercheck' => UserRoleMiddleware::class,
+            'prevent.auth.access' => PreventAuthenticatedAccess::class,
         ]);
 
         //

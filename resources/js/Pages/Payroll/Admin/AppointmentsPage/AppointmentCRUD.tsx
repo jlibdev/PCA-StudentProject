@@ -22,17 +22,21 @@ export function AppointmentStore({
     compensationTypes,
 }: {
     openDialog: any;
-    compensationTypes: Array<string>;
+    compensationTypes: any;
 }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        type: "joshua",
-        compensation_code: 1,
-        has_mandatory_deduction: true,
+        type: "",
+        compensation_name: "",
+        has_mandatory_deduction: false,
     });
+
+    console.log(data);
 
     const changeBasicPayType = (value: string) => {
         data.type = value;
     };
+
+    // console.log(compensationTypes);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -53,8 +57,8 @@ export function AppointmentStore({
                     </div>,
                     { duration: 2000 }
                 );
-                reset("type", "has_mandatory_deduction", "compensation_code");
-                openDialog(false);
+                reset(); // Clears all form fields
+                openDialog(false); // Close the dialog
             },
             onError: () => {
                 toast(
@@ -67,9 +71,7 @@ export function AppointmentStore({
                             <span className="pl-6">Please try again...</span>
                         </div>
                     </div>,
-                    {
-                        duration: 2000,
-                    }
+                    { duration: 2000 }
                 );
             },
         });
@@ -80,52 +82,62 @@ export function AppointmentStore({
             <form onSubmit={submit} className="gap-4 flex flex-col">
                 <div>
                     <Label
-                        htmlFor="appointment_type"
-                        className={errors.appointment_type && "text-red-600"}
-                    >
+                        htmlFor="type"
+                        className={errors.type && "text-red-600"}>
                         Appointment Type Name
                     </Label>
                     <Input
                         min={0}
-                        id="appointment_type"
+                        id="type"
                         type="text"
-                        name="appointment_type"
-                        value={data.appointment_type}
+                        name="type"
+                        value={data.type}
                         onChange={(e) =>
                             setData(
-                                "appointment_type",
+                                "type",
                                 e.target.value.toLocaleUpperCase()
                             )
                         }
                     />
                     <InputError
-                        message={errors.appointment_type}
+                        message={errors.type}
                         className="mt-2"
                     />
                 </div>
 
-                <div>
-                    <Label
-                        htmlFor="basic_pay_type"
-                        className={errors.basic_pay_type && "text-red-600"}
-                    >
-                        Basic Pay Type
-                    </Label>
-                    <Select onValueChange={changeBasicPayType}>
-                        <SelectTrigger>
-                            <SelectValue placeholder="SELECT BASIC PAY TYPE" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {compensationTypes.map((type) => (
-                                <SelectItem value={type}>{type}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <InputError
-                        message={errors.basic_pay_type}
-                        className="mt-2"
-                    />
-                </div>
+                {/* second div */}
+
+        <div>
+            <Label
+                htmlFor="compensation_code"
+                className={errors.compensation_name && "text-red-600"}
+                >
+                    Compensation Code
+                </Label>
+                <Select
+                    id="compensation_name"
+                    // value={data.compensation_code || ""}
+                    // onValueChange={(value) => setData("compensation_code", value)}
+                >
+                <SelectTrigger>
+                    <SelectValue placeholder="Select a compensation type" />  {/* Placeholder visible when no value is selected */}
+                </SelectTrigger>
+                <SelectContent>
+            {
+                compensationTypes.map(compensation_name => {
+                    return (  // Add return here
+                        <SelectItem onMouseDown={()=> setData("compensation_name" , compensation_name)} key={compensation_name} value={compensation_name}>
+                            {compensation_name}
+                        </SelectItem>
+                    );
+                })
+            }
+        </SelectContent>
+    </Select>
+    <InputError message={errors.compensation_name} className="mt-2" />
+
+    </div>
+
 
                 <div className="flex items-center gap-3">
                     <Label htmlFor="has_mandatory_deduction">
@@ -158,9 +170,9 @@ export function AppointmentUpdate({
     compensationTypes: Array<string>;
 }) {
     const { data, put, processing, errors } = useForm({
-        type: "POWER",
-        compensation_code: 1,
-        has_mandatory_deduction: false,
+        type: RowData.type,
+        compensation_code: RowData.compensation_code,
+        has_mandatory_deduction: RowData.has_mandatory_deduction,
     });
 
     const changeTaxType = (value: string) => {

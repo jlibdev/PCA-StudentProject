@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Payroll;
 
+use App\Exports\Payrollexport;
 use App\Http\Controllers\Controller;
 use App\Models\AgencyShare;
 use App\Models\CompensationType;
@@ -12,6 +13,8 @@ use App\Models\PayrollSheet;
 use App\Models\SignatoriesModel;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use App\Exports\PayrollFunctionExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Inertia\Response;
 
 class PayrollSheetController extends Controller
@@ -130,6 +133,12 @@ class PayrollSheetController extends Controller
         return redirect()->back()->with('success', 'Successfully stored Payroll Sheet');
     }
 
+    //print payroll
+    public function exportPayrollFunction(){
+
+        return Excel::download(new Payrollexport, 'payroll_entries.xlsx');
+
+    }
     /**
      * Remove the specified resource from storage.
      */

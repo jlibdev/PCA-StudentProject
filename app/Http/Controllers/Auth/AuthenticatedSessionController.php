@@ -32,12 +32,12 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-        
+
         $host = $request->getHost();
         $subdomain = explode('.', $host)[0];
 
         if($subdomain === 'payroll'){
-            return redirect()->intended(route('admin.dashboard'));   
+            return redirect()->intended(route('admin.dashboard'));
         }
 
         else if($subdomain === 'bioadmin'){
@@ -57,7 +57,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
-        
+
         return redirect(route('payroll.login'));
     }
 }

@@ -12,7 +12,6 @@ class Employee extends Model
 	protected $fillable = [
 		'appointment_code',
 		'position_code',
-		'income_tax_code',
 		'employee_number',
 		'first_name',
 		'middle_name',

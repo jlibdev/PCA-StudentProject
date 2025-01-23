@@ -23,22 +23,25 @@ export function AgencyShareStore({
 }) {
     const { data, setData, post, processing, errors, reset, setError } =
         useForm({
-            name: "power",
-            shorthand: "PWR",
+            name: "",
+            shorthand: "",
             is_mandatory: false,
-            compensation_links: ["sfhisdhfisdhf"] as Array<string>,
+            compensation_link: ["niggalations", "huh"] as Array<string>,
             fixed_amount: 300,
-            remittance_percentage: 0.1,
+            remittance_percent: 0.1,
             ceiling_amount: 10.11,
         });
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        data.compensation_links = [...selectedItems];
+        data.compensation_link = [...selectedItems];
 
-        if (data.remittance_percentage == 0 && data.ceiling_amount == 0) {
+        if (
+            data.remittance_percent == 0 &&
+            data.ceiling_amount == 0
+        ) {
             setError(
-                "remittance_percentage",
+                "remittance_percent",
                 "Amount and remittance must not be zero at the same time."
             );
             return;
@@ -64,9 +67,9 @@ export function AgencyShareStore({
                     "name",
                     "shorthand",
                     "is_mandatory",
-                    "remittance_percentage",
+                    "remittance_percent",
                     "ceiling_amount",
-                    "compensation_links"
+                    "compensation_link"
                 );
                 openDialog(false);
             },
@@ -137,9 +140,9 @@ export function AgencyShareUpdate({
             name: "power",
             shorthand: "PWR",
             is_mandatory: false,
-            compensation_links: ["wow"] as Array<string>,
+            compensation_link: ["wow"] as Array<string>,
             fixed_amount: 300,
-            remittance_percentage: 0.1,
+            remittance_percent: 0.1,
             ceiling_amount: 10.11,
         }
     );
@@ -147,10 +150,10 @@ export function AgencyShareUpdate({
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        data.compensation_links = [...selectedItems];
+        data.compensation_link = [...selectedItems];
 
         if (selected == "Fixed") {
-            data.remittance_percentage = 0;
+            data.remittance_percent = 0;
             data.ceiling_amount = 0;
         }
         if (selected == "Remittance") {
@@ -159,7 +162,7 @@ export function AgencyShareUpdate({
 
         if (
             data.fixed_amount == 0 &&
-            data.remittance_percentage == 0 &&
+            data.remittance_percent == 0 &&
             data.ceiling_amount == 0
         ) {
             setError(
@@ -167,7 +170,7 @@ export function AgencyShareUpdate({
                 "Amount and remittance must not be zero at the same time."
             );
             setError(
-                "remittance_percentage",
+                "remittance_percent",
                 "Amount and remittance must not be zero at the same time."
             );
             return;
@@ -183,20 +186,20 @@ export function AgencyShareUpdate({
                         </div>
                         <div className="flex">
                             <span className="pl-6">
-                                Successfully Edited {data.agency_share_name}
+                                Successfully Edited {data.name}
                             </span>
                         </div>
                     </div>,
                     { duration: 2000 }
                 );
                 reset(
-                    "agency_share_name",
+                    "name",
                     "shorthand",
-                    "amount",
+                    "fixed_amount",
                     "is_mandatory",
                     "remittance_percent",
                     "ceiling_amount",
-                    "compensation_links"
+                    "compensation_link"
                 );
                 setOpenDialog(false);
             },
@@ -220,21 +223,21 @@ export function AgencyShareUpdate({
         });
     };
     if (RowData.compensation_links != null) {
-        data.compensation_links = RowData.compensation_links
+        data.compensation_link = RowData.compensation_links
             .split(",")
             .map((item: string) => item.trim());
-    } else data.compensation_links = [];
+    } else data.compensation_link = [];
 
     const [baseItems, setBaseItems] = useState<Array<string>>([
         ...compensationTypes,
     ]);
     const [selectedItems, setSelectedItems] = useState<Array<string>>([
-        ...data.compensation_links,
+        ...data.compensation_link,
     ]);
     const [selected, setSelected] = useState<string>("");
 
     useEffect(() => {
-        if (data.amount > 0) {
+        if (data.fixed_amount > 0) {
             setSelected("Fixed");
         } else if (data.remittance_percent > 0 && data.ceiling_amount > 0) {
             setSelected("Remittance");

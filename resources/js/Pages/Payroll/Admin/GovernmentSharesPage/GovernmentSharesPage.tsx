@@ -111,13 +111,13 @@ export default GovernmentSharesPage;
 
 const columns: ColumnDef<agencyTypes>[] = [
     { accessorKey: "agency_share_code", header: "ID" },
-    { accessorKey: "agency_share_name", header: "NAME OF AGENCY SHARE" },
+    { accessorKey: "name", header: "NAME OF AGENCY SHARE" },
     { accessorKey: "shorthand", header: "SHORTHAND" },
     {
-        accessorKey: "amount",
+        accessorKey: "fixed_amount",
         header: "AMOUNT",
         cell: ({ row }) => {
-            const number = Number(row.getValue("amount"));
+            const number = Number(row.getValue("fixed_amount"));
             return <p>₱ {number.toLocaleString("en-US")}</p>;
         },
     },
@@ -132,9 +132,9 @@ const columns: ColumnDef<agencyTypes>[] = [
         accessorKey: "remittance_percent",
         header: "REMITTANCE %",
         cell: ({ row }) => {
-            return row.getValue("amount") != 0
-                ? "N/A"
-                : row.getValue("remittance_percent") + "%";
+            return row.getValue("remittance_percent") != 0
+                ? row.getValue("remittance_percent") + "%"
+                : "N/A";
         },
     },
     {
@@ -156,7 +156,7 @@ const columns: ColumnDef<agencyTypes>[] = [
                     name: "Edit",
                     dialogtitle: cn(
                         "Edit Appointment ",
-                        rowData.agency_share_name
+                        rowData.name
                     ),
                     dialogContent: (
                         <AgencyShareUpdate
@@ -174,7 +174,7 @@ const columns: ColumnDef<agencyTypes>[] = [
                     name: "Delete",
                     dialogtitle: cn(
                         "Are you sure you want to delete Agency Share:  ",
-                        rowData.agency_share_name,
+                        rowData.name,
                         "?"
                     ),
                     dialogContent: (

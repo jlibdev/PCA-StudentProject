@@ -16,13 +16,13 @@ const GovernmentShareStore = ({
     setData: any;
     errors: Partial<
         Record<
-            | "agency_share_name"
+            | "name"
             | "shorthand"
-            | "amount"
+            | "fixed_amount"
             | "is_mandatory"
             | "remittance_percent"
             | "ceiling_amount"
-            | "compensation_links",
+            | "compensation_link",
             string
         >
     >;
@@ -38,30 +38,30 @@ const GovernmentShareStore = ({
             <div className="grid grid-cols-2 gap-5">
                 <section>
                     <Label
-                        className={errors.agency_share_name && "text-red-600"}
+                        className={errors.name && "text-red-600"}
                     >
                         Name of Agency Share
                     </Label>
                     <Input
-                        id="agency_share_name"
+                        id="name"
                         type="text"
-                        name="agency_share_name"
-                        value={data.agency_share_name}
+                        name="name"
+                        value={data.name}
                         onChange={(e) =>
                             setData(
-                                "agency_share_name",
+                                "name",
                                 e.target.value.toUpperCase()
                             )
                         }
                     />
                     <InputError
-                        message={errors.agency_share_name}
+                        message={errors.name}
                         className="mt-2"
                     />
                 </section>
                 <section>
                     <Label
-                        className={errors.agency_share_name && "text-red-600"}
+                        className={errors.name && "text-red-600"}
                     >
                         Shorthand
                     </Label>
@@ -93,15 +93,15 @@ const GovernmentShareStore = ({
                         <Label>Amount</Label>
                         <Input
                             disabled={selected !== "Fixed"}
-                            id="amount"
+                            id="fixed_amount"
                             type="number"
-                            name="amount"
+                            name="fixed_amount"
                             step="0.01"
                             min="1"
-                            value={data.amount}
-                            onChange={(e) => setData("amount", e.target.value)}
+                            value={data.fixed_amount}
+                            onChange={(e) => setData("fixed_amount", e.target.value)}
                         />
-                        <InputError message={errors.amount} className="mt-2" />
+                        <InputError message={errors.fixed_amount} className="mt-2" />
                     </section>
                 </div>
 

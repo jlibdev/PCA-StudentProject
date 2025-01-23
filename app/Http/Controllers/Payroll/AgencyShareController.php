@@ -24,21 +24,20 @@ class AgencyShareController extends Controller
         return Inertia::render('Payroll/Admin/GovernmentSharesPage/GovernmentSharesPage', ['data' => $data, 'compensationTypes' => $compensationTypes]);
     }
 
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         // Convert Array Input to String
-        $links = $request->input('compensation_links')
-            ? implode(", ", $request->input('compensation_links'))
+        $links = $request->input('compensation_link')
+            ? implode(", ", $request->input('compensation_link'))
             : null;
 
         // Validate user request
         $validate = $request->validate([
-            'name' => 'required|string|max:255',
-            'shorthand' => 'required|string|max:50',
+            'name' => 'required|string|max:255|unique:agency_shares,name',
+            'shorthand' => 'required|string|max:50|unique:agency_shares,shorthand',
             'fixed_amount' => 'required|numeric',
             'is_mandatory' => 'required|boolean',
             'remittance_percent' => 'required|numeric',
@@ -48,25 +47,28 @@ class AgencyShareController extends Controller
         ]);
 
         // Create new AgencyShare
-        AgencyShare::create([
-            'name' => $validate['name'],
-            'shorthand' => $validate['shorthand'],
-            'fixed_amount' => $validate['fixed_amount'],
-            'is_mandatory' => $validate['is_mandatory'],
-            'remittance_percent' => $validate['remittance_percent'],
-            'ceiling_amount' => $validate['ceiling_amount'],
-            'compensation_links' => $links,
-        ]);
+        try {
+            AgencyShare::create([
+                'name' => $validate['name'],
+                'shorthand' => $validate['shorthand'],
+                'fixed_amount' => $validate['fixed_amount'],
+                'is_mandatory' => $validate['is_mandatory'],
+                'remittance_percent' => $validate['remittance_percent'],
+                'ceiling_amount' => $validate['ceiling_amount'],
+                'compensation_link' => $links,
+            ]);
+        
+            return redirect()->back()->with('success', 'Data received successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong: ' . $e->getMessage());
+        }
 
-        return redirect()->back()->with('success', 'Data received successfully!');
+        // return redirect()->back()->with('success', 'Data received successfully!');
     }
 
     /**
      * Update the specified resource in storage.
      */
-
-    //  TODO: SA PAG UPDATE SA MGA DAPAT NAKA UNIQUE LIKE SHORTHAND DAPAT MA ADDRESS
-    // [x]: MANA BAIIII
     public function update(Request $request, $agency_share_code)
     {
         $links = $request->input('compensation_link')

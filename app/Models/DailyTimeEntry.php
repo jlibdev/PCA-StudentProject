@@ -10,6 +10,7 @@ class DailyTimeEntry extends Model
 	protected $primaryKey = 'dtr_entry_code';
 
 	protected $fillable = [
+        'employee_code',
 		'date',
 		'time_in_am',
 		'time_out_am',

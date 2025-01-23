@@ -46,13 +46,13 @@ export interface appointmentTypes {
 
 export interface agencyTypes {
     agency_share_code?: number;
-    agency_share_name: string;
+    name: string;
     shorthand: string;
-    amount: number;
+    fixed_amount: number;
     is_mandatory: boolean;
     remittance_percent: number;
     ceiling_amount: number;
-    compensation_links: Array<string>;
+    compensation_link: Array<string>;
 };
 
 export interface deductionTypes {

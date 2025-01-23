@@ -19,9 +19,8 @@ return new class extends Migration
 				This might need to be utilized;
 				or this could be set by the user. */
 
-            $table->string('title');
-
-            $table->string('salary_grade');
+            $table->string('title')->unique();
+            $table->integer('salary_grade', false, true);
 
             $table->timestamps();
         });

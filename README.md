@@ -17,7 +17,7 @@ FRONT END
 
 
 BACK END
-- composer install
+- composer install / composer install --ignore-platform-reqs
 - cp .env.example .env
 - php artisan key:generate
 - php artisan migrate

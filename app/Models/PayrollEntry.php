@@ -10,7 +10,6 @@ class PayrollEntry extends Model
 	protected $primaryKey = 'payroll_entry_code';
 
     protected $fillable = [
-		'current_position',
 		'employee_code',
 		'payroll_sheet_code'
 	];

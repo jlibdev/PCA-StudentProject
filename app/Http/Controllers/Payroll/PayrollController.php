@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Payroll;
 
+
+use App\Exports\Payrollentries;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -55,6 +58,11 @@ class PayrollController extends Controller
     public function update(Request $request, string $id)
     {
         //
+    }
+
+    public function exportPayrollEntries()
+    {
+        return Excel::download(new Payrollentries, 'payroll_entries.xlsx');
     }
 
     /**

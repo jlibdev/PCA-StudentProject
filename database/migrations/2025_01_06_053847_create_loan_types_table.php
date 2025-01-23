@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('loan_code');
 
 			$table->string('name')->unique();
-            $table->string('shorthand')->nullable();
+            $table->string('shorthand')->unique()->nullable();
             $table->string('provider')->nullable();
 
             $table->timestamps();

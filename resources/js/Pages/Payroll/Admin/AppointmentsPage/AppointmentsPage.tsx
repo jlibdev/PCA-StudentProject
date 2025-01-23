@@ -21,14 +21,17 @@ import { DataTable } from "@/Components/DataTable";
 import PaginationTable from "@/Components/Pagination";
 import {
     AppointmentDelete,
+    // AppointmentDelete,
     AppointmentStore,
     AppointmentUpdate,
 } from "./AppointmentCRUD";
 
 const AppointmentsPage = () => {
     const data = (usePage().props.data as appointmentTypes[]) || [];
+    const compensationTypes = usePage().props.compensationTypes;
 
-    console.log(usePage().props);
+    // console.log(compensationTypes);
+
     const [openDialog, setOpenDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState<string>("");
     const table = useReactTable({
@@ -87,8 +90,7 @@ const AppointmentsPage = () => {
                         >
                             <AppointmentStore
                                 compensationTypes={
-                                    usePage().props
-                                        .compensationTypes as Array<string>
+                                    compensationTypes
                                 }
                                 openDialog={() => setOpenDialog(!openDialog)}
                             />
@@ -113,7 +115,7 @@ export default AppointmentsPage;
 const columns: ColumnDef<appointmentTypes>[] = [
     { accessorKey: "appointment_code", header: "ID", enableSorting: true },
     { accessorKey: "type", header: "TYPE" },
-    { accessorKey: "basic_pay_type", header: "BASIC PAY TYPE" },
+    { accessorKey: "compensation_name", header: "BASIC PAY TYPE" },
     {
         accessorKey: "has_mandatory_deduction",
         header: "MANDATORY DEDUCTION",
